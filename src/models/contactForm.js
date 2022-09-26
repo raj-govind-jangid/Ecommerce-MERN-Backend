@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const { Schema } = mongoose;
 
-const user = new Schema({
+const contactForm = new Schema({
   fullname: String,
   email: {
     type: String,
@@ -9,9 +9,8 @@ const user = new Schema({
     required: true
   }, 
   password: String,
-  userType: Number,
 });
 
-const User = mongoose.model('User', user);
+const ContactForm = mongoose.model('ContactForm', contactForm);
 
-module.exports = User;
+module.exports = ContactForm;

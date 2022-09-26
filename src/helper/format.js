@@ -1,5 +1,6 @@
 const formatError = (data) => {
-    return data.map((x)=>{return {[x.param] : `${x.param} has ${x.msg}`} });
+    let result = data[0]
+    return `${result.msg}`
 }
 
 module.exports = {formatError};
