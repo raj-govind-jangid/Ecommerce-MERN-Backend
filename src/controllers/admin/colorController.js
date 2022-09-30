@@ -2,10 +2,14 @@ const express = require('express')
 const app = express()
 const Color = require('../../models/color');
 
-exports.createSize = async (req,res)=>{
+exports.createColor = async (req,res)=>{
     try{
-        if(req.body.hasOwnProperty("productId") && req.body.hasOwnProperty("name") && req.body.hasOwnProperty("status")){
-            let color = {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({ "status":false, "message": formatError(errors.array()) });
+        }
+        else{
+            let size = {
                 "name":req.body.name,
                 "status":req.body.status
             }
@@ -14,56 +18,56 @@ exports.createSize = async (req,res)=>{
                 res.status(200).json({"status":true,"message":"Create Successfully"})
             })
             .catch((err)=>{
-                res.status(400).json({"status":false,"message":err})
+                res.status(400).json({"status":false,"message":err.message})
             })
-        }
-        else{
-            res.status(422).json({"status":false,"message":"Validation Error"})
         }
     }
     catch(err){
-        res.status(400).json({"status":false,"message":err})
+        res.status(400).json({"status":false,"message":err.message})
     }
 }
 
-exports.editSize = async (req,res)=>{
+exports.editColor = async (req,res)=>{
     try{
-        if(req.params.hasOwnProperty("id") && req.body.hasOwnProperty("name") && req.body.hasOwnProperty("status")){
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({"status": false,"message": formatError(errors.array()) });
+        }
+        else{
             let updateSize = {
                 "name": req.body.name,
+                "colorCode": req.body.colorCode,
                 "status": req.body.status,
             }
-            await Size.findByIdAndUpdate(req.params.id,updateSize).then(data=>{
+            await Size.findByIdAndUpdate(req.params.colorId,updateSize).then(data=>{
                 res.status(200).json({"status":true,"message":"Update Successfully"})
             })
-            .catch((error)=>{
-                res.status(400).json({"status":false,"message":error});
+            .catch((err)=>{
+                res.status(400).json({"status":false,"message":err.message});
             })
-        }
-        else{
-            res.status(422).json({"status":false,"message":"Validation Error"})
         }
     }
     catch(err){
-        res.status(400).json({"status":false,"message":err})
+        res.status(400).json({"status":false,"message":err.message})
     }
 }
 
-exports.deleteSize = async (req,res)=>{
+exports.deleteColor = async (req,res)=>{
     try{
-        if(req.params.hasOwnProperty("id")){
-            await Category.findByIdAndDelete(req.params.id).then(data=>{
-                res.status(200).json({"status":true,"message":"Deleted Successfully"})
-            })
-            .catch((error)=>{
-                res.status(400).json({"status":false,"message":error});
-            })
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(422).json({"status": false,"message": formatError(errors.array()) });
         }
         else{
-            res.status(422).json({"status":false,"message":"Validation Error"})
+            await Category.findByIdAndDelete(req.body.colorId).then(data=>{
+                res.status(200).json({"status":true,"message":"Deleted Successfully"})
+            })
+            .catch((err)=>{
+                res.status(400).json({"status":false,"message":err.message});
+            })
         }
     }
     catch(err){
-        res.status(400).json({"status":false,"message":err})
+        res.status(400).json({"status":false,"message":err.message})
     }
 }
