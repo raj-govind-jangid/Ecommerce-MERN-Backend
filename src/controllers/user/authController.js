@@ -5,6 +5,8 @@ const bcrypt = require('bcrypt');
 const saltRounds = 10;
 let jwt = require('jsonwebtoken');
 const privateJWTKey = process.env.JWT_SECRET_KEY
+const { validationResult } = require('express-validator');
+const { formatError } = require('../../helper/format');
 
 exports.login = async (req,res)=>{
     try{

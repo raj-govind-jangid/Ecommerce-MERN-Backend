@@ -6,6 +6,14 @@ var cors = require('cors')
 
 // create express app
 const app = express();
+
+app.get("/",(req,res)=>{
+    return res.status(200).json({
+        status: true,
+        message: "Ecommerce Server"
+    });
+})
+
 app.use(cors())
 require('./src/db/db')
 
